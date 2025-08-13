@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Reviews - Ultimate Hangman</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+    <h1>🎯 Ultimate Hangman</h1>
+    <div class="nav-links">
+        <a href="index.html">🏠 Home</a>
+        <a href="about.html">ℹ About</a>
+        <a href="instruction.html">📜 Instructions</a>
+    </div>
+</nav>
+
+<section class="page-content">
+    <div class="info-box">
+        <h2>💬 Player Reviews</h2>
+        <div id="reviewList"></div>
+    </div>
+</section>
+
+<script>
+    function loadReviews() {
+        const feedbackList = JSON.parse(localStorage.getItem("hangmanFeedback") || "[]");
+        const reviewListDiv = document.getElementById("reviewList");
+        if (feedbackList.length === 0) {
+            reviewListDiv.innerHTML = "<p>No reviews yet. Be the first to review!</p>";
+            return;
+        }
+        reviewListDiv.innerHTML = feedbackList.map(f => `
+            <div class="review-item">
+                <p>⭐ ${f.rating} — ${f.review}</p>
+                <small>${f.date}</small>
+            </div>
+        `).join("");
+    }
+    loadReviews();
+</script>
+
+</body>
+</html>

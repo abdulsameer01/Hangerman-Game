@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ultimate Hangman Game</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ✅ Navigation Bar -->
+    <nav class="navbar">
+      <h1>🎯 Ultimate Hangman</h1>
+      <div class="nav-links">
+        <a href="about.html">ℹ About</a>
+        <a href="review.html">💬 Reviews</a>
+        <a href="instruction.html">📜 Instructions</a>
+      </div>
+    </nav>
+
+    <!-- ✅ About Section -->
+    <section id="aboutSection" class="info-section" style="display: none">
+      <h2>ℹ About the Game</h2>
+      <p>
+        <strong>Ultimate Hangman</strong> is an interactive and fun
+        word-guessing game built using HTML, CSS, and JavaScript. The goal is to
+        guess the hidden word by selecting letters while avoiding too many wrong
+        guesses that complete the hangman.
+      </p>
+    </section>
+
+    <!-- ✅ Review Section -->
+    <section id="reviewSection" class="info-section" style="display: none">
+      <h2>💬 Player Reviews</h2>
+      <div id="reviewList">
+        <p>No reviews yet. Be the first to review!</p>
+      </div>
+      <br />
+    </section>
+
+    <!-- ✅ Instruction Section -->
+    <section id="instructionSection" class="info-section" style="display: none">
+      <h2>📜 How to Play</h2>
+      <ul>
+        <li>Click the <b>Start Game</b> button to begin.</li>
+        <li>
+          Guess the hidden word by clicking letters on the virtual keyboard.
+        </li>
+        <li>Each wrong guess adds a part to the hangman image.</li>
+        <li>
+          You win by guessing all the letters before the hangman is complete.
+        </li>
+        <li>You lose if you make too many wrong guesses (max 6).</li>
+      </ul>
+    </section>
+
+    <!-- ✅ Start Screen -->
+    <section id="startScreen" class="start-screen">
+      <h2>Welcome to Hangman</h2>
+      <p>Click the button below to start your game.</p>
+      <button id="startGameBtn" class="start-btn">▶ Start Game</button>
+    </section>
+
+    <!-- ✅ Game Screen -->
+    <section id="gameScreen" class="game-screen" style="display: none">
+      <!-- Game Over Modal -->
+      <div class="game-modal" id="gameModal">
+        <div class="modal-content">
+          <img src="images/lost.gif" alt="Game Result" />
+          <h4>Game Over!</h4>
+          <p>The correct word was: <b></b></p>
+
+          <!-- Feedback Form -->
+          <div class="feedback">
+            <label for="userRating">Your Rating:</label>
+            <select id="userRating">
+              <option value="">Select...</option>
+              <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+              <option value="4">⭐⭐⭐⭐ Good</option>
+              <option value="3">⭐⭐⭐ Average</option>
+              <option value="2">⭐⭐ Poor</option>
+              <option value="1">⭐ Bad</option>
+            </select>
+
+            <label for="userReview">Your Review:</label>
+            <textarea
+              id="userReview"
+              placeholder="Write your feedback..."
+            ></textarea>
+
+            <button id="submitFeedback">Submit Feedback</button>
+          </div>
+
+          <button class="play-again">PLAY AGAIN</button>
+        </div>
+      </div>
+
+      <!-- Game Container -->
+      <div class="container">
+        <div class="hangman-box">
+          <img src="#" alt="" />
+        </div>
+        <div class="game-box">
+          <h4 class="score-text">Score: 0</h4>
+          <!-- ✅ Live Score -->
+          <ul class="word-display"></ul>
+          <h4 class="hint-text">Hint: <b></b></h4>
+          <h4 class="guesses-text">Incorrect guesses <b></b></h4>
+          <div class="keyboard"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ Scripts -->
+    <script src="Word-List.js"></script>
+    <script src="script.js"></script>
+    <script>
+      // Toggle info sections from nav
+      document.querySelectorAll(".nav-links button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".info-section")
+            .forEach((sec) => (sec.style.display = "none"));
+          const target = document.getElementById(btn.dataset.section);
+          target.style.display =
+            target.style.display === "block" ? "none" : "block";
+        });
+      });
+
+      // Start Game
+      document.getElementById("startGameBtn").addEventListener("click", () => {
+        document.getElementById("startScreen").style.display = "none";
+        document.getElementById("gameScreen").style.display = "block";
+        document
+          .querySelectorAll(".info-section")
+          .forEach((sec) => (sec.style.display = "none"));
+      });
+
+      // Load reviews from localStorage
+      function loadReviews() {
+        const feedbackList = JSON.parse(
+          localStorage.getItem("hangmanFeedback") || "[]"
+        );
+        const reviewListDiv = document.getElementById("reviewList");
+        if (feedbackList.length === 0) {
+          reviewListDiv.innerHTML =
+            "<p>No reviews yet. Be the first to review!</p>";
+          return;
+        }
+        reviewListDiv.innerHTML = feedbackList
+          .map(
+            (f) => `
+            <div class="review-item">
+                <p>⭐ ${f.rating} — ${f.review}</p>
+                <small>${f.date}</small>
+            </div>
+        `
+          )
+          .join("");
+      }
+      loadReviews();
+    </script>
+  </body>
+</html>
